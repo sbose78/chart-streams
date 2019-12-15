@@ -25,8 +25,10 @@ ENV LANG=en_US.utf8
 
 COPY --from=builder /go/src/github.com/otaviof/chart-streams/build/chart-streams /usr/local/bin/chart-streams
 
+RUN ls -ltr /usr/local/bin
 USER 10001
 
-ENTRYPOINT [ "/usr/local/bin/chart-streams serve" ]
+WORKDIR /usr/local
+ENTRYPOINT [ "./bin/chart-streams serve" ]
 
 EXPOSE 8080
