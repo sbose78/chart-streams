@@ -30,6 +30,6 @@ COPY --from=builder /go/src/github.com/otaviof/chart-streams/build/chart-streams
 RUN ls -ltr /usr/local/chart-streams/bin
 USER 10001
 
-CMD [ "/bin/sh" ]
+ENTRYPOINT [ "./chart-streams serve" ]
 
 EXPOSE 8080
