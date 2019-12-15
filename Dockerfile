@@ -32,4 +32,4 @@ COPY --from=builder /go/src/github.com/otaviof/chart-streams/build/chart-streams
 
 USER 10001
 
-ENTRYPOINT [ "/usr/local/bin/chart-streams serve" ]
+ENTRYPOINT [ "/usr/local/bin/chart-streams" "serve" ]
