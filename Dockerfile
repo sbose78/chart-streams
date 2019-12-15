@@ -12,7 +12,7 @@ WORKDIR /go/src/github.com/otaviof/chart-streams
 
 COPY . .
 RUN make build
-RUN ls -ltr build/ && pwd
+RUN ls -ltr build/ && pwd && chmod 777 build/*
 
 #--------------------------------------------------------------------
 FROM centos:7
