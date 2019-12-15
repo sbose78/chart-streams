@@ -26,11 +26,13 @@ ENV APP_USER_NAME=appserver
 RUN useradd --no-create-home -s /bin/bash ${APP_USER_NAME}
 
 COPY --from=builder /go/src/github.com/otaviof/chart-streams ${APP_INSTALL_PREFIX}/bin/app-server
-
+RUN ls -ltr ${APP_INSTALL_PREFIX}/bin
 # From here onwards, any RUN, CMD, or ENTRYPOINT will be run under the following user
 USER ${APP_USER_NAME}
 
 WORKDIR ${APP_INSTALL_PREFIX}
-ENTRYPOINT [ "./bin/app-server serve" ]
+RUN ls -ltr ${APP_INSTALL_PREFIX}/bin && pwd
+
+CMD [ "/bin/sh" ]
 
 EXPOSE 8080
