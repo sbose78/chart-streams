@@ -29,6 +29,8 @@ LABEL author "Shoubhik Bose <shbose@redhat.com>"
 ENV LANG=en_US.utf8
 
 COPY --from=builder /go/src/github.com/otaviof/chart-streams/build/chart-streams /usr/local/bin/chart-streams
+COPY --from=builder /go/src/github.com/otaviof/chart-streams/build/helm /usr/local/bin/helm
+
 
 USER 10001
 
