@@ -14,24 +14,8 @@ COPY . .
 RUN make build
 RUN ls -ltr build/ && pwd && chmod 777 build/*
 
-#--------------------------------------------------------------------
-FROM centos:7
-ENV LANG=en_US.utf8
-ENV APP_INSTALL_PREFIX=/usr/local/app-server
+USER 10001
 
-ENV GOPATH=/tmp/go
-
-# Create a non-root user and a group with the same name: "appserver"
-ENV APP_USER_NAME=appserver
-RUN useradd --no-create-home -s /bin/bash ${APP_USER_NAME}
-
-COPY --from=builder /go/src/github.com/otaviof/chart-streams ${APP_INSTALL_PREFIX}/bin/app-server
-RUN ls -ltr ${APP_INSTALL_PREFIX}/bin
-# From here onwards, any RUN, CMD, or ENTRYPOINT will be run under the following user
-USER ${APP_USER_NAME}
-
-WORKDIR ${APP_INSTALL_PREFIX}
-RUN ls -ltr ${APP_INSTALL_PREFIX}/bin && pwd
 
 CMD [ "/bin/sh" ]
 
