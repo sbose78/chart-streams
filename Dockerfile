@@ -10,6 +10,8 @@ ARG VERBOSE=1
 
 WORKDIR /go/src/github.com/otaviof/chart-streams
 
+
+COPY . .
 RUN make 
 
 #--------------------------------------------------------------------
