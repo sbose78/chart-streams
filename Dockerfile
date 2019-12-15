@@ -1,6 +1,5 @@
 FROM openshift/origin-release:golang-1.13 AS builder
 LABEL maintainer "Devtools <devtools@redhat.com>"
-ENV GOPATH /tmp/go
 
 ENV LANG=en_US.utf8
 ENV GIT_COMMITTER_NAME devtools
@@ -12,7 +11,8 @@ WORKDIR /go/src/github.com/otaviof/chart-streams
 
 
 COPY . .
-RUN make 
+RUN make build
+RUN ls -ltr && pwd
 
 #--------------------------------------------------------------------
 
