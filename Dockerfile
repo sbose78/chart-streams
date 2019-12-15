@@ -23,12 +23,13 @@ LABEL maintainer "Devtools <devtools@redhat.com>"
 LABEL author "Shoubhik Bose <shbose@redhat.com>"
 ENV LANG=en_US.utf8
 
-COPY --from=builder /go/src/github.com/otaviof/chart-streams/build/chart-streams /usr/local/bin/chart-streams
+WORKDIR /usr/local/chart-streams/bin
 
-RUN ls -ltr /usr/local/bin
+COPY --from=builder /go/src/github.com/otaviof/chart-streams/build/chart-streams /usr/local/chart-streams/bin/chart-streams
+
+RUN ls -ltr /usr/local/chart-streams/bin
 USER 10001
 
-WORKDIR /usr/local
 CMD [ "/bin/sh" ]
 
 EXPOSE 8080
