@@ -29,6 +29,6 @@ RUN ls -ltr /usr/local/bin
 USER 10001
 
 WORKDIR /usr/local
-ENTRYPOINT [ "./bin/chart-streams serve" ]
+CMD [ "./bin/chart-streams serve" ]
 
 EXPOSE 8080
