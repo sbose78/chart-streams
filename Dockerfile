@@ -15,21 +15,22 @@ RUN make build
 RUN ls -ltr build/ && pwd
 
 #--------------------------------------------------------------------
-
-FROM registry.access.redhat.com/ubi7/ubi-minimal
-
-LABEL com.redhat.delivery.appregistry=true
-LABEL maintainer "Devtools <devtools@redhat.com>"
-LABEL author "Shoubhik Bose <shbose@redhat.com>"
+FROM centos:7
 ENV LANG=en_US.utf8
+ENV APP_INSTALL_PREFIX=/usr/local/app-server
 
-WORKDIR /usr/local/chart-streams/bin
+ENV GOPATH=/tmp/go
 
-COPY --from=builder /go/src/github.com/otaviof/chart-streams/build/chart-streams /usr/local/chart-streams/bin/chart-streams
+# Create a non-root user and a group with the same name: "appserver"
+ENV APP_USER_NAME=appserver
+RUN useradd --no-create-home -s /bin/bash ${APP_USER_NAME}
 
-RUN ls -ltr /usr/local/chart-streams/bin
-USER 10001
+COPY --from=builder /go/src/github.com/otaviof/chart-streams ${APP_INSTALL_PREFIX}/bin/app-server
 
-ENTRYPOINT [ "./chart-streams serve" ]
+# From here onwards, any RUN, CMD, or ENTRYPOINT will be run under the following user
+USER ${APP_USER_NAME}
+
+WORKDIR ${APP_INSTALL_PREFIX}
+ENTRYPOINT [ "./bin/app-server serve" ]
 
 EXPOSE 8080
