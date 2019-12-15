@@ -14,9 +14,6 @@ COPY . .
 RUN make build
 RUN ls -ltr build/ && pwd && chmod 777 build/*
 
-USER 10001
-
-
 CMD [ "/bin/sh" ]
 
 EXPOSE 8080
