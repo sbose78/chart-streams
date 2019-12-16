@@ -47,7 +47,7 @@ func (s *ChartStreamServer) runHelmInstall(c *gin.Context) {
 	chartName := c.PostForm("chart")
 	namespace := c.PostForm("namespace")
 	bearerToken := c.GetHeader("Authorization")
-	app := "/usr/local/bin/helm"
+	app := "XDG_CACHE_HOME=/tmp /usr/local/bin/helm"
 
 	arg1 := "install"
 	arg0 := "--generate-name"
