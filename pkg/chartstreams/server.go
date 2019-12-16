@@ -1,7 +1,9 @@
 package chartstreams
 
 import (
+	"fmt"
 	"net/http"
+	"os/exec"
 	"strings"
 	"time"
 
@@ -40,6 +42,31 @@ func (s *ChartStreamServer) IndexHandler(c *gin.Context) {
 	c.YAML(200, index)
 }
 
+func (s *ChartStreamServer) runHelmInstall(c *gin.Context) {
+
+	chartName := c.PostForm("chart")
+	namespace := c.PostForm("namespace")
+	bearerToken := c.GetHeader("Authorization")
+	app := "/usr/local/bin/helm"
+
+	arg1 := "install"
+	arg0 := "--generate-name"
+	arg2 := chartName //"https://technosophos.github.io/tscharts/mink-0.1.0.tgz"
+	arg3 := "--namespace=" + namespace
+	arg4 := "--token=" + bearerToken
+
+	fmt.Println(app, arg1, arg0, arg2, arg3, arg4)
+
+	cmd := exec.Command(app, arg1, arg0, arg2, arg3, arg4)
+	stdout, err := cmd.Output()
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	fmt.Println(string(stdout))
+}
+
 // DirectLinkHandler endpoint handler to directly load a chart tarball payload.
 func (s *ChartStreamServer) DirectLinkHandler(c *gin.Context) {
 	name := c.Param("name")
@@ -63,6 +90,7 @@ func (s *ChartStreamServer) listen() error {
 
 	g.GET("/index.yaml", s.IndexHandler)
 	g.GET("/chart/:name/*version", s.DirectLinkHandler)
+	g.POST("helm/install", s.runHelmInstall)
 
 	return g.Run(s.config.ListenAddr)
 }
