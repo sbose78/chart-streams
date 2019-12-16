@@ -3,6 +3,7 @@ package chartstreams
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"os/exec"
 	"strings"
 	"time"
@@ -47,7 +48,7 @@ func (s *ChartStreamServer) runHelmInstall(c *gin.Context) {
 	chartName := c.PostForm("chart")
 	namespace := c.PostForm("namespace")
 	bearerToken := c.GetHeader("Authorization")
-	app := "XDG_CACHE_HOME=/tmp /usr/local/bin/helm"
+	app := "/usr/local/bin/helm"
 
 	arg1 := "install"
 	arg0 := "--generate-name"
@@ -58,6 +59,9 @@ func (s *ChartStreamServer) runHelmInstall(c *gin.Context) {
 	fmt.Println(app, arg1, arg0, arg2, arg3, arg4)
 
 	cmd := exec.Command(app, arg1, arg0, arg2, arg3, arg4)
+	cmd.Env = os.Environ()
+	cmd.Env = append(cmd.Env, "XDG_CACHE_HOME=/tmp")
+
 	stdout, err := cmd.Output()
 
 	if err != nil {
